@@ -10,9 +10,10 @@ const Gameboard = (function () {
         }
     }
     const getBoard = () => board;
+
     const addPlayerMark = (row, column, player) => {
 
-        if (board[row][column] === '') board[row][column].addToken(player);
+        if (board[row][column].getValue() === '') board[row][column].addToken(player);
     }
     const printBoard = () => {
         const boardWithCellValues = board.map((row) => row.map((cell) => cell.getValue()));
@@ -37,9 +38,9 @@ function Player(name) {
 }
 function GameController() {
     let playerOne = Player("PlayerOne");
-    playerOne.mark = 'X';
+    playerOne.mark = "X";
     let playerTwo = Player("PlayerTwo")
-    playerTwo.mark = 'O';
+    playerTwo.mark = "O";
 
 
     let activePlayer = playerOne;
@@ -51,16 +52,17 @@ function GameController() {
     const printNewRound = () => {
         Gameboard.printBoard();
         console.log(`${getActivePlayer().name}'s turn.`);
+        console.log(`${getActivePlayer().mark}`);
 
     };
     const playRound = (row, column) => {
         console.log(
             `InSerting ${getActivePlayer().name}'s Mark into row ${row} column ${column}...`
         );
-        Gameboard.addPlayerMark(row, column, getActivePlayer().mark);
+        Gameboard.addPlayerMark(row, column, getActivePlayer());
 
-        /*  This is where we would check for a winner and handle that logic,
-            such as a win message. */
+        let ticBoard = Gameboard.getBoard();
+        
 
         // Switch player turn
         switchPlayerTurn();
@@ -69,6 +71,9 @@ function GameController() {
     printNewRound();
     return {
         playRound,
-        getActivePlayer
-    };
+        getActivePlayer,
+        getBoard : Gameboard.getBoard(),    };
 }
+const game = GameController();
+game.playRound(0,2);
+game.playRound(0,0)
