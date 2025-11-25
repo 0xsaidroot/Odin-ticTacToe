@@ -24,7 +24,10 @@ const Gameboard = (function () {
         );
         console.log(boardWithCellValues);
     };
-    return { getBoard, addPlayerMark, printBoard };
+    const resetBoard = () => {
+        board.map((row) => row.map((cell) => cell.clearCell()));
+    }
+    return { getBoard, addPlayerMark, printBoard, resetBoard };
 })();
 
 function Cell() {
@@ -33,14 +36,15 @@ function Cell() {
         value = player.mark;
     };
     const getValue = () => value;
-    return { addToken, getValue };
+    const clearCell = () => value = "";
+    return { addToken, getValue, clearCell };
 }
 
 function Player(name) {
     let mark = "";
     return { name, mark };
 }
-function GameController(p1Name = "Player One",p2Name = "Player Two") {
+function GameController(p1Name = "Player One", p2Name = "Player Two") {
     let playerOne = Player(p1Name);
     playerOne.mark = "X";
     let playerTwo = Player(p2Name);
@@ -146,9 +150,11 @@ function GameController(p1Name = "Player One",p2Name = "Player Two") {
         if (result === 'X' || result === 'O') {
             gameOver = true;
             winnerMark = result;
+            winnerPlayer = (result === 'X') ? playerOne : playerTwo;
             console.log(`${result} wins!`);
             return;
         }
+
 
         if (result === 'draw') {
             isDraw = true;
@@ -161,9 +167,20 @@ function GameController(p1Name = "Player One",p2Name = "Player Two") {
         printNewRound();
     };
     printNewRound();
+
     const getGameOver = () => gameOver;
     const getWinnerMark = () => winnerMark;
     const getIsDraw = () => isDraw;
+    const getWinnerPlayer = () => winnerPlayer;
+    const resetGame = () => {
+        gameOver = false;
+        winnerMark = "";
+        isDraw = false;
+        activePlayer = playerOne;
+        Gameboard.resetBoard();
+    };
+
+
     return {
         playRound,
         getActivePlayer,
@@ -171,12 +188,21 @@ function GameController(p1Name = "Player One",p2Name = "Player Two") {
         getGameOver,
         getIsDraw,
         getWinnerMark,
+        resetGame,
+        getWinnerPlayer,
     };
 }
 function ScreenController() {
-    const game = GameController();
+    let game;
     const playerTurnDiv = document.querySelector(".turn");
     const boardDiv = document.querySelector(".board");
+    const intro_container = document.querySelector('.intro-screen');
+    const gameConatiner = document.querySelector('.game-screen');
+    const playerOne = document.querySelector('#playerOne');
+    const playerTwo = document.querySelector('#playerTwo');
+    const start_btn = document.querySelector('#start');
+    const playAgainBtn = document.querySelector("#playAgain");
+
 
     const updateScreen = () => {
         boardDiv.textContent = "";
@@ -186,19 +212,20 @@ function ScreenController() {
         const gameOver = game.getGameOver();
         const isDraw = game.getIsDraw();
         const winnerMark = game.getWinnerMark();
-
+        const winnerPlayer = game.getWinnerPlayer();
 
         if (gameOver) {
+            playAgainBtn.style.display = "block";
             if (isDraw) {
                 playerTurnDiv.textContent = "It's a Draw!";
-            } else if (winnerMark === 'X') {
-                playerTurnDiv.textContent = "PlayerOne wins!";
             } else {
-                playerTurnDiv.textContent = "PlayerTwo wins!";
+                playerTurnDiv.textContent = `${winnerPlayer.name} wins!`;
             }
-        }else{
-        playerTurnDiv.textContent = `${activePlayer.name}'s turn...`;
+        } else {
+            playerTurnDiv.textContent = `${activePlayer.name}'s turn...`;
+            playAgainBtn.style.display = "none";
         }
+
 
 
         board.forEach((row, rowIndex) => {
@@ -223,9 +250,22 @@ function ScreenController() {
         game.playRound(Number(selectedRow), Number(selectedColumn));
         updateScreen();
     }
-    boardDiv.addEventListener("click", clickHandlerBoard);
+    function clickHandlerStartBtn() {
+        let p1Name = (playerOne.value !== "") ? playerOne.value : 'Player One';
+        let p2Name = (playerTwo.value !== "") ? playerTwo.value : 'Player Two';
+        game = GameController(p1Name, p2Name);
+        intro_container.style.display = 'none';
+        gameConatiner.style.visibility = 'visible';
+        updateScreen();
+        boardDiv.addEventListener("click", clickHandlerBoard);
+    }
+    playAgainBtn.addEventListener("click", () => {
+        game.resetGame();
+        updateScreen();
+    });
 
-    updateScreen();
+    start_btn.addEventListener('click', clickHandlerStartBtn);
+
 }
 
 ScreenController();
