@@ -1,9 +1,17 @@
+@font-face {
+    font-family: 'Chokokutai';
+    src: url('font/Chokokutai-Regular.woff2') format('woff2'),
+        url('font/Chokokutai-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
 .board {
   display: grid;
   height: 500px;
   width: 500px;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(6, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
   border: 1px solid black;
   gap: 2px;
   padding: 2px;
@@ -12,11 +20,66 @@
 
 .cell {
   display: flex;
+  font-family: 'Chokokutai';
   justify-content: center;
   align-items: center;
   text-align: center;
-  font-size: 2rem;
+  font-size: 5rem;
   border: 1px solid grey;
   background: lightyellow;
   cursor: pointer;
+}
+.game-screen{
+  display: none;
+}
+body{
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.intro-screen{
+  width: 450px;
+  font-size: 1.5rem;
+  padding: 2em 1em;
+  border: 1px solid red;
+  border-radius: 10px;
+}
+#startBtn{
+  width: 100%;
+  padding: 1em;
+  font-size: 1rem;
+}
+.intro-screen p{
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 5px;
+}
+p>input{
+ padding: 5px;
+}
+dialog{
+  width: 200px;
+  height: 150px;
+  font-size: 1.5rem;
+  border-radius: 10px;
+  border: 1px solid grey;
+  overflow: hidden;
+}
+.btn-container{
+  height: 100%;
+  padding: 5px 4px;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-around;
+  align-items:center ;
+}
+dialog::backdrop{
+  background-color: black;
+  opacity: 0.6;
+}
+dialog button{
+  font-size: 2rem;
+  border-radius: 5px;
+  padding:2px;
 }

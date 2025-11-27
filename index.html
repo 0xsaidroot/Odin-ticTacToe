@@ -11,22 +11,31 @@
 
 <body>
     <div class="intro-screen">
-        <label for="playerOne">Player One's Name :</label>
-        <input type="text" name="one_name" id="playerOne">
+        <p>
+            <label for="playerOne">Player One's Name :</label>
+            <input type="text" name="one_name" id="playerOne">
+        </p>
+        <p>
 
-        <label for="playerTwo">Player Two's Name :</label>
-        <input type="text" name="two_name" id="playerTwo">
+            <label for="playerTwo">Player Two's Name :</label>
+            <input type="text" name="two_name" id="playerTwo">
+        </p>
 
-        <button id="start">Start Game</button>
+        <button id="startBtn">Start Game</button>
     </div>
 
     <div class="game-screen">
         <div class="container">
             <h1 class="turn"></h1>
             <div class="board"></div>
-            <button id="playAgain">Play Again</button>
         </div>
     </div>
+    <dialog>
+        <div class="btn-container">
+            <p id="text"></p>
+            <button id="playAgainBtn">Play Again</button>
+        </div>
+    </dialog>
 </body>
 
 </html>
